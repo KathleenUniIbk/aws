@@ -10,7 +10,7 @@ let ibk = {
 // Karte initialisieren
 let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 
-// thematische Layer
+// thematische Layer Overlay
 let overlays = {
     stations: L.featureGroup().addTo(map),
 }
@@ -40,9 +40,30 @@ async function loadStations(url) {
 
     // Wetterstationen mit Icons und Popups
    
-        console.log(jsondata);
-        //console.log(jsondata);
+    console.log(jsondata);
+    //console.log(jsondata);
+    L.geoJSON(jsondata, {
+        attribution: "Datenquelle: <a href='https://lawinen.report'>avalanche.report</a>",
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/wifi.png",
+                    iconAnchor: [16, 37],
+                })
+            });
+        },
+        onEachFeature: function (feature, layer) {
+            console.log(feature.properties);
+            layer.bindPopup(`
+
+                <h4>${feature.properties.name} (${feature.properties.SH})</h4>
+
+                `);
+        }
+    }).addTo(overlays.stations);
+}
+
         
-    }
+    
 
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
