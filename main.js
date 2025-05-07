@@ -56,7 +56,7 @@ async function loadStations(url) {
             console.log(feature.properties);
             layer.bindPopup(`
 
-                <h4>${feature.properties.name} (${feature.properties.SH})</h4>
+                <h4>${feature.properties.name}</h4>
 
                 `);
         }
