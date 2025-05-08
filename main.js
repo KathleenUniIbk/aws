@@ -39,7 +39,7 @@ async function loadStations(url) {
     let jsondata = await response.json();
 
     // Wetterstationen mit Icons und Popups
-   
+
     console.log(jsondata);
     //console.log(jsondata);
     L.geoJSON(jsondata, {
@@ -57,13 +57,19 @@ async function loadStations(url) {
             layer.bindPopup(`
 
                 <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m)</h4>
-
+                <ul>
+                  <li>Lufttemperatur (c) ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li>
+                  <li>Relative Luftfeuchte (%) ${feature.properties.RH || "-"}</li>
+                  <li>Windgeschwindigkeit (km/h) ${feature.properties.WG || "-"}</li>
+                  <li>Schneehöhe (cm) ${feature.properties.HS || "-"}</li>
+                </ul>
+                <span></span>
                 `);
         }
     }).addTo(overlays.stations);
 }
 
-        
-    
+
+
 
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
