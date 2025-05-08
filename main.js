@@ -29,6 +29,7 @@ L.control.layers({
 }, {
     "Wetterstationen": overlays.stations,
     "Temperatur": overlays.temperature,
+    "Wind": overlays.wind,
 }).addTo(map);
 
 // Maßstab
