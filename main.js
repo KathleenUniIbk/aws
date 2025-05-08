@@ -95,3 +95,5 @@ function showTemperature (jsondata){
       },
   }).addTo(overlays.temperature);
 }
+
+console.log(COLORS);
