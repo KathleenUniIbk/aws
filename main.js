@@ -15,6 +15,8 @@ let overlays = {
     stations: L.featureGroup(),
     temperature: L.featureGroup(),
     wind: L.featureGroup().addTo(map),
+    snow: L.featureGroup(),
+    direction: L.featureGroup(),
 }
 
 // Layer control
@@ -30,6 +32,8 @@ L.control.layers({
     "Wetterstationen": overlays.stations,
     "Temperatur": overlays.temperature,
     "Wind": overlays.wind,
+    "Schnee": overlays.snow,
+    "Windrichtung": overlays.direction,
 }).addTo(map);
 
 // Maßstab
@@ -74,6 +78,8 @@ async function loadStations(url) {
     }).addTo(overlays.stations);
     showTemperature(jsondata);
     showWind(jsondata);
+    showSnow(jsondata);
+    showDirection(jsondata);
 }
 
 
@@ -132,6 +138,74 @@ function showWind(jsondata) {
             })
         },
     }).addTo(overlays.wind);
+}
+
+console.log(COLORS);
+function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+}
+
+//let testColor = getColor(-5, COLORS.wind);
+//console.log("TestClor fuer temp 10", testColor);
+
+//Schnee HS
+loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+function showSnow(jsondata) {
+    L.geoJSON(jsondata, {
+        filter: function (feature) {
+            if (feature.properties.HS > 0 && feature.properties.HS < 50000) {
+                return true;
+            }
+        },
+        pointToLayer: function (feature, latlng) {
+            let color = getColor(feature.properties.HS, COLORS.snow);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color: ${color}">${feature.properties.HS.toFixed(1)}</span>`
+                }),
+            })
+        },
+    }).addTo(overlays.snow);
+}
+
+console.log(COLORS);
+function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+}
+
+//let testColor = getColor(-5, COLORS.wind);
+//console.log("TestClor fuer temp 10", testColor);
+
+//Kombination Windgeschwindigkeit & Windrichtung
+loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+function showDirection(jsondata) {
+    L.geoJSON(jsondata, {
+        filter: function (feature) {
+            if (feature.properties.WG > 0 && feature.properties.WG < 5000) {
+                return true;
+            }
+        },
+        pointToLayer: function (feature, latlng) {
+            let color = getColor(feature.properties.WG, COLORS.wind);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color: ${color}">${feature.properties.WG.toFixed(1)}</span>`
+                }),
+            })
+        },
+    }).addTo(overlays.direction);
 }
 
 console.log(COLORS);
