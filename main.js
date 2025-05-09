@@ -186,8 +186,20 @@ function getColor(value, ramp) {
 //let testColor = getColor(-5, COLORS.wind);
 //console.log("TestClor fuer temp 10", testColor);
 
-//Kombination Windgeschwindigkeit & Windrichtung
+//Kombination Windgeschwindigkeit & Windrichtung WR
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+  //Umwandlung Grad in Text Himmelsrichtung für Wind
+  function degreetoText(degrees) {
+    if (degrees>= 337.5 || degrees < 22.5) return "N";
+    if (degrees>= 22.5 && degrees < 67.5) return "NO";
+    if (degrees>= 67.5 && degrees < 112.5) return "O";
+    if (degrees>= 112.5 && degrees < 157.5) return "SO";
+    if (degrees>= 157.5 && degrees < 202.5) return "S";
+    if (degrees>= 202.5 && degrees < 247.5) return "SW";
+    if (degrees>= 247.5 && degrees < 292.5) return "W";
+    if (degrees>= 292.5 && degrees < 337.5) return "NW";
+  }
 
 function showDirection(jsondata) {
     L.geoJSON(jsondata, {
@@ -220,4 +232,3 @@ function getColor(value, ramp) {
 //let testColor = getColor(-5, COLORS.wind);
 //console.log("TestClor fuer temp 10", testColor);
 
-console.log(geoJSONdata)
