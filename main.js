@@ -190,7 +190,7 @@ function getColor(value, ramp) {
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
 
   //Umwandlung Grad in Text Himmelsrichtung für Wind
-  function degreetoText(degrees) {
+  function getdegreetoText(degrees) {
     if (degrees>= 337.5 || degrees < 22.5) return "N";
     if (degrees>= 22.5 && degrees < 67.5) return "NO";
     if (degrees>= 67.5 && degrees < 112.5) return "O";
@@ -210,6 +210,8 @@ function showDirection(jsondata) {
         },
          pointToLayer: function (feature, latlng) {
             let color = getColor(feature.properties.WG, COLORS.wind);
+            let windrichtung = feature.properties.WR;
+            let degreetoText = getdegreetoText (windrichtung);
             return L.marker(latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
