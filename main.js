@@ -19,6 +19,18 @@ let overlays = {
     direction: L.featureGroup().addTo(map),
 }
 
+// Change default options
+L.control.rainviewer({
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
+
 // Layer control
 L.control.layers({
     "Relief avalanche.report": L.tileLayer(
@@ -189,18 +201,18 @@ function getColor(value, ramp) {
 //Kombination Windgeschwindigkeit & Windrichtung WR
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
 
-  //Umwandlung Grad in Text Himmelsrichtung für Wind
-  function getdegreetoText(degrees) {
-    if (degrees>= 337.5 || degrees < 22.5) return "N";
-    if (degrees>= 22.5 && degrees < 67.5) return "NO";
-    if (degrees>= 67.5 && degrees < 112.5) return "O";
-    if (degrees>= 112.5 && degrees < 157.5) return "SO";
-    if (degrees>= 157.5 && degrees < 202.5) return "S";
-    if (degrees>= 202.5 && degrees < 247.5) return "SW";
-    if (degrees>= 247.5 && degrees < 292.5) return "W";
-    if (degrees>= 292.5 && degrees < 337.5) return "NW";
+//Umwandlung Grad in Text Himmelsrichtung für Wind
+function getdegreetoText(degrees) {
+    if (degrees >= 337.5 || degrees < 22.5) return "N";
+    if (degrees >= 22.5 && degrees < 67.5) return "NO";
+    if (degrees >= 67.5 && degrees < 112.5) return "O";
+    if (degrees >= 112.5 && degrees < 157.5) return "SO";
+    if (degrees >= 157.5 && degrees < 202.5) return "S";
+    if (degrees >= 202.5 && degrees < 247.5) return "SW";
+    if (degrees >= 247.5 && degrees < 292.5) return "W";
+    if (degrees >= 292.5 && degrees < 337.5) return "NW";
     return "-";
-  }
+}
 
 function showDirection(jsondata) {
     L.geoJSON(jsondata, {
@@ -209,10 +221,10 @@ function showDirection(jsondata) {
                 return true;
             }
         },
-         pointToLayer: function (feature, latlng) {
+        pointToLayer: function (feature, latlng) {
             let color = getColor(feature.properties.WG, COLORS.wind);
             let windrichtung = feature.properties.WR;
-            let degreetoText = getdegreetoText (windrichtung);
+            let degreetoText = getdegreetoText(windrichtung);
             return L.marker(latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
