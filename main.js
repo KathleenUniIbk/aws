@@ -199,6 +199,7 @@ loadStations("https://static.avalanche.report/weather_stations/stations.geojson"
     if (degrees>= 202.5 && degrees < 247.5) return "SW";
     if (degrees>= 247.5 && degrees < 292.5) return "W";
     if (degrees>= 292.5 && degrees < 337.5) return "NW";
+    return "-";
   }
 
 function showDirection(jsondata) {
@@ -215,7 +216,7 @@ function showDirection(jsondata) {
             return L.marker(latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
-                    html: `<span style="background-color: ${color}">${feature.properties.WR.toFixed(1)}</span>`,
+                    html: `<span style="background-color: ${color}">${degreetoText}</span>`,
                 }),
             })
         },
