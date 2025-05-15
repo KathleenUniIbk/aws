@@ -97,9 +97,9 @@ async function loadStations(url) {
 
 
 
-//Temperatur
+//GeoJson
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
-
+//Temperatur
 function showTemperature(jsondata) {
     L.geoJSON(jsondata, {
         filter: function (feature) {
@@ -132,8 +132,6 @@ function getColor(value, ramp) {
 //console.log("TestClor fuer temp -3", testColor);
 
 //Wind
-loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
-
 function showWind(jsondata) {
     L.geoJSON(jsondata, {
         filter: function (feature) {
@@ -145,7 +143,7 @@ function showWind(jsondata) {
             let color = getColor(feature.properties.WG, COLORS.wind);
             return L.marker(latlng, {
                 icon: L.divIcon({
-                    className: "aws-div-wind icon",
+                    className: "aws-div-icon span",
                     html: `<span style="background-color: ${color}">${feature.properties.WG.toFixed(1)}</span>`
                 }),
             })
@@ -166,8 +164,6 @@ function getColor(value, ramp) {
 //console.log("TestClor fuer temp 10", testColor);
 
 //Schnee HS
-loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
-
 function showSnow(jsondata) {
     L.geoJSON(jsondata, {
         filter: function (feature) {
@@ -200,10 +196,9 @@ function getColor(value, ramp) {
 //console.log("TestClor fuer temp 10", testColor);
 
 //Kombination Windgeschwindigkeit & Windrichtung WR
-loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
 
 //Umwandlung Grad in Text Himmelsrichtung für Wind
-function getdegreetoText(degrees) {
+/*function getdegreetoText(degrees) {
     if (degrees >= 337.5 || degrees < 22.5) return "N";
     if (degrees >= 22.5 && degrees < 67.5) return "NO";
     if (degrees >= 67.5 && degrees < 112.5) return "O";
@@ -213,7 +208,7 @@ function getdegreetoText(degrees) {
     if (degrees >= 247.5 && degrees < 292.5) return "W";
     if (degrees >= 292.5 && degrees < 337.5) return "NW";
     return "-";
-}
+}*/
 
 function showDirection(jsondata) {
     L.geoJSON(jsondata, {
@@ -224,12 +219,10 @@ function showDirection(jsondata) {
         },
         pointToLayer: function (feature, latlng) {
             let color = getColor(feature.properties.WG, COLORS.wind);
-            let windrichtung = feature.properties.WR;
-            let degreetoText = getdegreetoText(windrichtung);
             return L.marker(latlng, {
                 icon: L.divIcon({
-                    className: "aws-div-icon",
-                    html: `<span style="background-color: ${color}">${degreetoText}</span>`,
+                    className: "aws-div-icon-wind span",
+                    html: `<span><i style="transform:rotate(${feature.properties.WR}deg);color: ${color}" class="fa-solid fa-circle-arrow-down"></i></span>`,
                 }),
             })
         },
